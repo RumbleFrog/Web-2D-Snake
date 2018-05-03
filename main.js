@@ -16,7 +16,7 @@ let direction = DIRECTIONS.DOWN
 
 function setup() {
     frameRate(4);
-    
+
     createCanvas(
         Math.ceil(windowWidth / SIZE) * SIZE, 
         Math.ceil(windowHeight / SIZE) * SIZE
@@ -184,25 +184,25 @@ function spawnFruit() {
 
 function keyPressed() {
     switch (keyCode) {
-        case 87: {
+        case 87, 38: {
             if (direction != DIRECTIONS.DOWN)
                 direction = DIRECTIONS.UP;
             break;
         }
 
-        case 83: {
+        case 83, 40: {
             if (direction != DIRECTIONS.UP)
                 direction = DIRECTIONS.DOWN;
             break;
         }
 
-        case 65: {
+        case 65, 37: {
             if (direction != DIRECTIONS.RIGHT)
                 direction = DIRECTIONS.LEFT;
             break;
         }
 
-        case 68: {
+        case 68, 39: {
             if (direction != DIRECTIONS.LEFT)
                 direction = DIRECTIONS.RIGHT;
             break;
