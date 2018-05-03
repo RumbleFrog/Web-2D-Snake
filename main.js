@@ -1,6 +1,6 @@
 const BORDER_WIDTH = 20
     , BORDER_HEIGHT = 20
-    , SIZE = 20;
+    , SIZE = 30;
 
 const DIRECTIONS = Object.freeze({
     UP: 0,
@@ -10,7 +10,9 @@ const DIRECTIONS = Object.freeze({
 });
 
 let direction = DIRECTIONS.DOWN
-    , snakes = [];
+    , snakes = []
+    , fruit = {}
+    , score = 0;
 
 function setup() {
     frameRate(2);
@@ -20,6 +22,8 @@ function setup() {
     innerHeight = height - BORDER_HEIGHT * 2;
 
     setUpSnake();
+
+    spawnFruit();
 }
 
 function draw() {
@@ -37,6 +41,8 @@ function draw() {
     move();
 
     render();
+
+    checkFruit();
 }
 
 function move() {
@@ -70,17 +76,79 @@ function move() {
     }
 }
 
+function appendSeg() {
+    switch (direction) {
+        case DIRECTIONS.UP: {
+            snakes.push({
+                x: snakes[snakes.length - 1].x,
+                y: snakes[snakes.length - 1].y + SIZE,
+            });
+            break;
+        }
+
+        case DIRECTIONS.DOWN: {
+            snakes.push({
+                x: snakes[snakes.length - 1].x,
+                y: snakes[snakes.length - 1].y - SIZE
+            });
+            break;
+        }
+
+        case DIRECTIONS.LEFT: {
+            snakes.push({
+                x: snakes[snakes.length - 1].x + SIZE,
+                y: snakes[snakes.length - 1].y
+            });
+            break;
+        }
+
+        case DIRECTIONS.RIGHT: {
+            snakes.push({
+                x: snakes[snakes.length - 1].x + SIZE,
+                y: snakes[snakes.length - 1].y
+            });
+            break;
+        }
+    }
+}
+
 function setUpSnake() {
     snakes.push({
-        x: innerWidth / 2,
-        y: innerHeight / 2
+        x: Math.ceil((innerWidth / 2) / SIZE) * SIZE,
+        y: Math.ceil((innerHeight / 2) / SIZE) * SIZE
     });
 }
 
 function render() {
+
+    fill('white');
+    stroke('white');
+
     snakes.forEach((seg) => {
         rect(seg.x, seg.y, SIZE, SIZE);
     })
+}
+
+function checkFruit() {
+
+    fill('yellow');
+    stroke('yellow');
+
+    rect(fruit.x, fruit.y, SIZE, SIZE);
+
+    if(snakes[0].x == fruit.x && snakes[0].y == fruit.y) {
+        appendSeg();
+        spawnFruit();
+    }
+}
+
+function spawnFruit() {
+    fruit = {
+        x: floor(random(BORDER_WIDTH, innerWidth / SIZE)) * SIZE,
+        y: floor(random(BORDER_HEIGHT, innerHeight / SIZE)) * SIZE
+    };
+
+    console.log(floor(random(BORDER_WIDTH, innerWidth / SIZE)) * SIZE);
 }
 
 function keyPressed() {
