@@ -1,6 +1,6 @@
 const BORDER_WIDTH = 20
     , BORDER_HEIGHT = 20
-    , SIZE = 30;
+    , SIZE = 20;
 
 const DIRECTIONS = Object.freeze({
     UP: 0,
@@ -15,8 +15,12 @@ let direction = DIRECTIONS.DOWN
     , score = 0;
 
 function setup() {
-    frameRate(2);
-    createCanvas(windowWidth, windowHeight);
+    frameRate(4);
+    
+    createCanvas(
+        Math.ceil(windowWidth / SIZE) * SIZE, 
+        Math.ceil(windowHeight / SIZE) * SIZE
+    );
 
     innerWidth = width - BORDER_WIDTH * 2;
     innerHeight = height - BORDER_HEIGHT * 2;
@@ -30,6 +34,9 @@ function draw() {
 
     background(0); // Re-render, clears everything
 
+    textSize(20);
+    text(`Score: ${score}`, windowWidth / 2 - BORDER_WIDTH * 2, BORDER_HEIGHT * 3);
+
     fill('red');
     stroke('red');
 
@@ -41,6 +48,10 @@ function draw() {
     move();
 
     render();
+
+    checkBodyCollision();
+
+    checkBound();
 
     checkFruit();
 }
@@ -129,6 +140,27 @@ function render() {
     })
 }
 
+function checkBound() {
+    if (snakes[0].x <= BORDER_WIDTH 
+        || snakes[0].x >= width - BORDER_WIDTH 
+        || snakes[0].y <= BORDER_HEIGHT 
+        || snakes[0].y >= height - BORDER_HEIGHT) {
+            alert('You hit the border!');
+            noLoop();
+        }
+}
+
+function checkBodyCollision() {
+    if (snakes.length > 1) {
+        for (var i = 1; i < snakes.length; i++) {
+            if (snakes[i].x == snakes[0].x && snakes[i].y == snakes[0].y) {
+                alert('You hit your own tail!');
+                noLoop();
+            }
+        }
+    }
+}
+
 function checkFruit() {
 
     fill('yellow');
@@ -137,6 +169,7 @@ function checkFruit() {
     rect(fruit.x, fruit.y, SIZE, SIZE);
 
     if(snakes[0].x == fruit.x && snakes[0].y == fruit.y) {
+        score++;
         appendSeg();
         spawnFruit();
     }
@@ -147,8 +180,6 @@ function spawnFruit() {
         x: floor(random(BORDER_WIDTH, innerWidth / SIZE)) * SIZE,
         y: floor(random(BORDER_HEIGHT, innerHeight / SIZE)) * SIZE
     };
-
-    console.log(floor(random(BORDER_WIDTH, innerWidth / SIZE)) * SIZE);
 }
 
 function keyPressed() {
