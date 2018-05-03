@@ -14,10 +14,11 @@ const GRADIENT = new Rainbow();
 let direction = DIRECTIONS.DOWN
     , snakes = []
     , fruit = {}
-    , score = 0;
+    , score = 0
+    , fps = 4;
 
 function setup() {
-    frameRate(4);
+    frameRate(fps);
 
     createCanvas(
         Math.ceil(windowWidth / SIZE) * SIZE, 
@@ -126,6 +127,8 @@ function appendSeg() {
             break;
         }
     }
+
+    frameRate(Math.ceil(fps *= 1.05));
 }
 
 function setUpSnake() {
@@ -192,28 +195,28 @@ function spawnFruit() {
 
 function keyPressed() {
     switch (keyCode) {
-        case 87, 38: {
+        case 87:
+        case 38:
             if (direction != DIRECTIONS.DOWN)
                 direction = DIRECTIONS.UP;
             break;
-        }
 
-        case 83, 40: {
+        case 83:
+        case 40: 
             if (direction != DIRECTIONS.UP)
                 direction = DIRECTIONS.DOWN;
             break;
-        }
 
-        case 65, 37: {
+        case 65:
+        case 37:
             if (direction != DIRECTIONS.RIGHT)
                 direction = DIRECTIONS.LEFT;
             break;
-        }
 
-        case 68, 39: {
+        case 68:
+        case 39:
             if (direction != DIRECTIONS.LEFT)
                 direction = DIRECTIONS.RIGHT;
             break;
-        }
     }
 }
