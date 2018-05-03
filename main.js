@@ -9,6 +9,8 @@ const DIRECTIONS = Object.freeze({
     RIGHT: 3
 });
 
+const GRADIENT = new Rainbow();
+
 let direction = DIRECTIONS.DOWN
     , snakes = []
     , fruit = {}
@@ -31,6 +33,9 @@ function setup() {
 }
 
 function draw() {
+
+    GRADIENT.setSpectrumByArray(['#08b9b6', '#c5f40b']);
+    GRADIENT.setNumberRange(0, 20);
 
     background(0); // Re-render, clears everything
 
@@ -131,13 +136,16 @@ function setUpSnake() {
 }
 
 function render() {
+    for (var i = 0; i < snakes.length; i++) {
 
-    fill('white');
-    stroke('white');
+        let color = GRADIENT.colorAt(i);
 
-    snakes.forEach((seg) => {
-        rect(seg.x, seg.y, SIZE, SIZE);
-    })
+        fill(`#${color}`);
+        stroke(`#${color}`);
+
+        rect(snakes[i].x, snakes[i].y, SIZE, SIZE);
+
+    }
 }
 
 function checkBound() {
